@@ -18,6 +18,7 @@ jobs:
             g++-riscv64-linux-gnu \
             gfortran-riscv64-linux-gnu \
             binutils-riscv64-linux-gnu
+          export PATH="/opt/riscv/bin:$PATH"
 
       - name: Get Nexus AM
         run: git clone https://github.com/OpenXiangShan/nexus-am.git $HOME/nexus-am
