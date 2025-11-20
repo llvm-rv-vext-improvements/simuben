@@ -10,8 +10,8 @@ if __name__ == "__main__":
     print(input)
 
     nexus_am = input.config.nexus_am
-    source = input.source_path
-    with NexusAMApp(nexus_am, source) as app:
+    sources = input.sources
+    with NexusAMApp(nexus_am, sources) as app:
         app.build()
 
         print("[simuben] Executable:")

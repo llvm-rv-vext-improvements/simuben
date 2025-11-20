@@ -20,4 +20,4 @@ echo "nexus_am:                                 " >> /tmp/simuben.yml
 echo "  path: $HOME/nexus-am                    " >> /tmp/simuben.yml
 echo "  toolchain_path: $(llvm-config --prefix) " >> /tmp/simuben.yml
 
-./simuben/main.py --source /tmp/goodbye.c --config /tmp/simuben.yml
+./simuben/main.py --sources /tmp/goodbye.c --config /tmp/simuben.yml

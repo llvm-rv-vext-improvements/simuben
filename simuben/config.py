@@ -25,4 +25,4 @@ class SimuBenConfig(NamedTuple):
 
 class SimuBenInput(NamedTuple):
     config: SimuBenConfig
-    source_path: Path
+    sources: list[Path]

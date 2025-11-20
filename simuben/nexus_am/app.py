@@ -6,16 +6,17 @@ from config import NexusAMConfig
 
 
 class NexusAMApp:
-    def __init__(self, config: NexusAMConfig, source_path: Path) -> None:
+    def __init__(self, config: NexusAMConfig, sources: list[Path]) -> None:
         self.__config = config
-        self.__source_path = source_path
+        self.__sources = sources
 
     def __enter__(self) -> "NexusAMApp":
         dir = self.__dir
         dir.mkdir(exist_ok=True)
 
-        source = dir / self.__source
-        shutil.copyfile(self.__source_path, source)
+        for src in self.__sources:
+            dst = dir / src.name
+            shutil.copyfile(src, dst)
 
         makefile = dir / "Makefile"
         with open(makefile, "w") as f:
@@ -45,7 +46,7 @@ class NexusAMApp:
 
     @property
     def name(self) -> str:
-        return self.__source_path.stem
+        return self.__sources[0].stem
 
     @property
     def executable(self) -> Path:
@@ -80,15 +81,11 @@ class NexusAMApp:
         return self.__config.path / "apps" / self.name
 
     @property
-    def __source(self) -> str:
-        return self.__source_path.name
-
-    @property
     def __makefile(self) -> str:
         return "\n".join(
             [
                 f"NAME = {self.name}",
-                f"SRCS = {self.__source}",
+                f"SRCS = {' '.join(map(str, self.__sources))}",
                 f"include $(AM_HOME)/Makefile.app",
                 f"$(DST_DIR)/%.o: %.ll",
                 f"\t@mkdir -p $(dir $@) && echo + CC $<",

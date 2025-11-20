@@ -18,15 +18,15 @@ def get_input() -> SimuBenInput:
     )
     parser.add_argument(
         "-s",
-        "--source",
+        "--sources",
         type=str,
-        required=True,
-        help="A path to source file to run",
+        nargs="+",
+        help="A paths to source files to run",
     )
 
     args = parser.parse_args()
 
     return SimuBenInput(
         config=SimuBenConfig.from_yaml_file(args.config),
-        source_path=Path(args.source),
+        sources=[Path(_) for _ in args.sources],
     )
