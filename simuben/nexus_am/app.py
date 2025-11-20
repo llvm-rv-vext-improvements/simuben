@@ -65,14 +65,14 @@ class NexusAMApp:
         )
 
         return [
-            "make",
-            "ARCH=riscv64-xs",
+            f"make",
+            f"ARCH=riscv64-xs",
             f"CC=clang {flags}",
             f"AS=clang {flags}",
-            "LD=ld.lld",
-            "OBJDUMP=llvm-objdump",
-            "OBJCOPY=llvm-objcopy",
-            "AR=llvm-ar",
+            f"LD=ld.lld",
+            f"OBJDUMP=llvm-objdump",
+            f"OBJCOPY=llvm-objcopy",
+            f"AR=llvm-ar",
         ]
 
     @property
