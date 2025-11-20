@@ -49,7 +49,7 @@ class NexusAMApp:
 
     @property
     def executable(self) -> Path:
-        return self.__dir / "build" / f"{self.name}.bin"
+        return self.__dir / "build" / f"{self.name}-riscv64-xs.bin"
 
     @property
     def __dir(self) -> Path:
