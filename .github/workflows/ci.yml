@@ -20,3 +20,6 @@ jobs:
 
       - name: Test Goodbye
         run: ./test/goodbye.sh
+
+      - name: Test C & LL
+        run: ./test/candll.sh
