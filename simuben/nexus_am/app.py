@@ -67,6 +67,7 @@ class NexusAMApp:
         return [
             "make",
             "ARCH=riscv64-xs",
+            "CROSS_COMPILE=",
             f"CC=clang {flags}",
             f"AS=clang {flags}",
             "LD=ld.lld",
