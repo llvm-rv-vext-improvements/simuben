@@ -27,7 +27,7 @@ class NexusAMApp:
         shutil.rmtree(self.__dir)
 
     def build(self) -> None:
-        command = ["make", "ARCH=riscv64-xs"]
+        command = ["make", "ARCH=riscv64-xs", "CROSS_COMPILE=riscv64-linux-gnu-"]
         os.environ["AM_HOME"] = str(self.__config.path)
 
         result = subprocess.run(
