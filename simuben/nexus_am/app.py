@@ -65,15 +65,17 @@ class NexusAMApp:
             ],
         )
 
+        r = self.__config.toolchain_path / "bin"
+
         return [
             f"make",
             f"ARCH=riscv64-xs",
-            f"CC=clang {flags}",
-            f"AS=clang {flags}",
-            f"LD=ld.lld",
-            f"OBJDUMP=llvm-objdump",
-            f"OBJCOPY=llvm-objcopy",
-            f"AR=llvm-ar",
+            f"CC={r}/clang {flags}",
+            f"AS={r}/clang {flags}",
+            f"LD={r}/ld.lld",
+            f"OBJDUMP={r}/llvm-objdump",
+            f"OBJCOPY={r}/llvm-objcopy",
+            f"AR={r}/llvm-ar",
         ]
 
     @property
