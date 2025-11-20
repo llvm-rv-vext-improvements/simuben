@@ -19,7 +19,13 @@ class SimuBenConfig(NamedTuple):
                     path=Path(yml["nexus_am"]["path"]),
                     toolchain_path=Path(yml["nexus_am"]["toolchain_path"]),
                 ),
-                verilator=None,
+                verilator=(
+                    VerilatorConfig(
+                        executable_path=Path(yml["verilator"]["path"]),
+                    )
+                    if "verilator" in yml
+                    else None
+                ),
             )
 
 
