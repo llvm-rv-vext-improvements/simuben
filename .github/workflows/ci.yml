@@ -20,15 +20,15 @@ jobs:
 
       - name: Smoke
         run: |
-          echo "#include <klib.h>               " >> goodbye.c
-          echo "                                " >> goodbye.c
-          echo "int main()                      " >> goodbye.c
-          echo "{                               " >> goodbye.c
-          echo "    printf("Hello, XiangShan"); " >> goodbye.c
-          echo "    return 0;                   " >> goodbye.c
-          echo "}                               " >> goodbye.c
+          echo "#include <klib.h>                 " >> goodbye.c
+          echo "                                  " >> goodbye.c
+          echo "int main()                        " >> goodbye.c
+          echo "{                                 " >> goodbye.c
+          echo "    printf(\"Hello, XiangShan\"); " >> goodbye.c
+          echo "    return 0;                     " >> goodbye.c
+          echo "}                                 " >> goodbye.c
 
-          echo "nexus_am:                       " >> simuben.yml
-          echo "  path: $HOME/nexus-am          " >> simuben.yml
+          echo "nexus_am:                         " >> simuben.yml
+          echo "  path: $HOME/nexus-am            " >> simuben.yml
 
           ./simuben/main.py --source goodbye.c --config simuben.yml
