@@ -13,10 +13,11 @@ class SimuBenConfig(NamedTuple):
     @classmethod
     def from_yaml_file(cls, path: Path):
         with open(path, "r") as f:
-            dictionary = yaml.safe_load(f)
+            yml = yaml.safe_load(f)
             return SimuBenConfig(
                 nexus_am=NexusAMConfig(
-                    path=Path(dictionary["nexus_am"]["path"]),
+                    path=Path(yml["nexus_am"]["path"]),
+                    toolchain_path=Path(yml["nexus_am"]["toolchain_path"]),
                 ),
                 verilator=None,
             )

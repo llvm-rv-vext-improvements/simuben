@@ -4,3 +4,4 @@ from typing import NamedTuple
 
 class NexusAMConfig(NamedTuple):
     path: Path
+    toolchain_path: Path

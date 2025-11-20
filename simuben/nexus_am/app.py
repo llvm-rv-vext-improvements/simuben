@@ -27,7 +27,7 @@ class NexusAMApp:
         shutil.rmtree(self.__dir)
 
     def build(self) -> None:
-        command = ["make", "ARCH=riscv64-xs", "CROSS_COMPILE=riscv64-linux-gnu-"]
+        command = self.__command_clang()
         os.environ["AM_HOME"] = str(self.__config.path)
 
         result = subprocess.run(
@@ -51,6 +51,30 @@ class NexusAMApp:
     def executable(self) -> Path:
         return self.__dir / "build" / f"{self.name}-riscv64-xs.bin"
 
+    def __command_clang(self) -> list[str]:
+        flags = " ".join(
+            [
+                "-target",
+                "riscv64-unknown-elf",
+                "-nostdlib",
+                "-ffreestanding",
+                "-Wno-empty-body",
+                "-Wno-unused-command-line-argument",
+                "-Wno-override-module",
+            ],
+        )
+
+        return [
+            "make",
+            "ARCH=riscv64-xs",
+            f"CC=clang {flags}",
+            f"AS=clang {flags}",
+            "LD=ld.lld",
+            "OBJDUMP=llvm-objdump",
+            "OBJCOPY=llvm-objcopy",
+            "AR=true",
+        ]
+
     @property
     def __dir(self) -> Path:
         return self.__config.path / "apps" / self.name
@@ -66,5 +90,8 @@ class NexusAMApp:
                 f"NAME = {self.name}",
                 f"SRCS = {self.__source}",
                 f"include $(AM_HOME)/Makefile.app",
+                f"$(DST_DIR)/%.o: %.ll",
+                f"\t@mkdir -p $(dir $@) && echo + CC $<",
+                f"\t@$(CC) $(CPPFLAGS) -std=gnu11 $(CFLAGS) -c -o $@ $(realpath $<)",
             ],
         )
