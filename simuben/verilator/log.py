@@ -3,7 +3,7 @@
 import re
 import argparse
 from collections import defaultdict
-from typing import List, DefaultDict
+from typing import Any, Iterable, List, DefaultDict
 from pathlib import Path
 
 Time = int
@@ -33,41 +33,40 @@ def argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def nemu_log_parse(file: Path) -> NemuLog:
+def nemu_log_parse(lines: Iterable[str]) -> NemuLog:
     pattern: re.Pattern = re.compile(
         r"\[PERF \]\[time=\s*(\d+)\]\s*([^:]+):\s*([^,]+),\s*(\d+)"
     )
 
     data: NemuLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-    with open(file, "r") as f:
-        for i, line in enumerate(f, 1):
-            line = line.strip()
-            if len(line) == 0:
-                continue
+    for i, line in enumerate(lines, 1):
+        line = line.strip()
+        if len(line) == 0:
+            continue
 
-            match = pattern.match(line)
-            if not match:
-                raise RuntimeError(f"Warning: Could not parse line {i}: {line}")
+        match = pattern.match(line)
+        if not match:
+            raise RuntimeError(f"Warning: Could not parse line {i}: {line}")
 
-            time: Time = int(match.group(1))
-            path: MetricNamespace = match.group(2).strip()
-            name: MetricName = match.group(3).strip()
-            value: MetricValue = int(match.group(4))
+        time: Time = int(match.group(1))
+        path: MetricNamespace = match.group(2).strip()
+        name: MetricName = match.group(3).strip()
+        value: MetricValue = int(match.group(4))
 
-            data[time][path][name].append(value)
+        data[time][path][name].append(value)
 
     return data
 
 
-def nemu_log_print(log: NemuLog) -> None:
+def nemu_log_print(log: NemuLog, f: Any | None = None) -> None:
     for _, dct in log.items():
         for path, dct in dct.items():
             for name, lst in dct.items():
                 if not any(v != 0 for v in lst):
                     continue
 
-                print(f"{path}.{name}: {lst}")
+                print(f"{path}.{name}: {lst}", file=f)
 
 
 if __name__ == "__main__":
@@ -75,5 +74,6 @@ if __name__ == "__main__":
     args: argparse.Namespace = parser.parse_args()
 
     file: Path = Path(args.file)
-    log: NemuLog = nemu_log_parse(file)
+    with open(file, "r") as f:
+        log: NemuLog = nemu_log_parse(f.readlines())
     nemu_log_print(log)

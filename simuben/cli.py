@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
+
 from config import SimuBenConfig, SimuBenInput
 
 
