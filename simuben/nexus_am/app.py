@@ -27,8 +27,6 @@ class NexusAMApp:
         shutil.rmtree(self.__dir)
 
     def build(self) -> None:
-        input("Press enter to continue")
-
         command = ["make", "ARCH=riscv64-xs"]
         os.environ["AM_HOME"] = str(self.__config.path)
 
