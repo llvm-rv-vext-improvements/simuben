@@ -7,32 +7,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Install
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          gcc-riscv64-linux-gnu \
-          g++-riscv64-linux-gnu \
-          gfortran-riscv64-linux-gnu \
-          binutils-riscv64-linux-gnu
+      - name: Install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc-riscv64-linux-gnu \
+            g++-riscv64-linux-gnu \
+            gfortran-riscv64-linux-gnu \
+            binutils-riscv64-linux-gnu
 
-    - name: Get Nexus AM
-      run: git clone git@github.com:OpenXiangShan/nexus-am.git $HOME/nexus-am
+      - name: Get Nexus AM
+        run: git clone git@github.com:OpenXiangShan/nexus-am.git $HOME/nexus-am
 
-    - name: Smoke
-      run: |
-        echo "#include <klib.h>               " >> goodbye.c
-        echo "                                " >> goodbye.c
-        echo "int main()                      " >> goodbye.c
-        echo "{                               " >> goodbye.c
-        echo "    printf("Hello, XiangShan"); " >> goodbye.c
-        echo "    return 0;                   " >> goodbye.c
-        echo "}                               " >> goodbye.c
+      - name: Smoke
+        run: |
+          echo "#include <klib.h>               " >> goodbye.c
+          echo "                                " >> goodbye.c
+          echo "int main()                      " >> goodbye.c
+          echo "{                               " >> goodbye.c
+          echo "    printf("Hello, XiangShan"); " >> goodbye.c
+          echo "    return 0;                   " >> goodbye.c
+          echo "}                               " >> goodbye.c
 
-        echo "nexus_am:                       " >> simuben.yml
-        echo "  path: $HOME/nexus-am          " >> simuben.yml
+          echo "nexus_am:                       " >> simuben.yml
+          echo "  path: $HOME/nexus-am          " >> simuben.yml
 
-        ./simuben/main.py --source goodbye.c --config simuben.yml
+          ./simuben/main.py --source goodbye.c --config simuben.yml
