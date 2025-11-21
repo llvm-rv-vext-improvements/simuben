@@ -1,23 +1,24 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 set -e
 
 cd "$(dirname "$0")" || exit
 cd ..
 
-rm -rf /tmp/goodbye.c
-rm -rf /tmp/simuben.yml
+cat > /tmp/goodbye.c <<TEST
+#include <klib.h>
 
-echo "#include <klib.h>                         " >> /tmp/goodbye.c
-echo "                                          " >> /tmp/goodbye.c
-echo "int main()                                " >> /tmp/goodbye.c
-echo "{                                         " >> /tmp/goodbye.c
-echo "    printf(\"Goodbye, XiangShan\");       " >> /tmp/goodbye.c
-echo "    return 0;                             " >> /tmp/goodbye.c
-echo "}                                         " >> /tmp/goodbye.c
+int main()
+{
+    printf("Goodbye, XiangShan");
+    return 0;
+}
+TEST
 
-echo "nexus_am:                                 " >> /tmp/simuben.yml
-echo "  path: $HOME/nexus-am                    " >> /tmp/simuben.yml
-echo "  toolchain_path: $(llvm-config --prefix) " >> /tmp/simuben.yml
+cat > /tmp/simuben.yml <<TEST
+nexus_am:
+  path: $HOME/nexus-am
+  toolchain_path: $(llvm-config --prefix)
+TEST
 
 ./simuben/main.py --sources /tmp/goodbye.c --config /tmp/simuben.yml
