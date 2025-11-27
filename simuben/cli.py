@@ -22,6 +22,7 @@ def get_input() -> SimuBenInput:
         "--sources",
         type=str,
         nargs="+",
+        required=True,
         help="A paths to source files to run",
     )
 

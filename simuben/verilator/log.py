@@ -11,7 +11,7 @@ MetricNamespace = str
 MetricName = str
 MetricValue = int
 
-NemuLog = DefaultDict[
+VerilatorLog = DefaultDict[
     Time,
     DefaultDict[
         MetricNamespace,
@@ -33,12 +33,12 @@ def argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def nemu_log_parse(lines: Iterable[str]) -> NemuLog:
+def verilator_log_parse(lines: Iterable[str]) -> VerilatorLog:
     pattern: re.Pattern = re.compile(
         r"\[PERF \]\[time=\s*(\d+)\]\s*([^:]+):\s*([^,]+),\s*(\d+)"
     )
 
-    data: NemuLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+    data: VerilatorLog = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
     for i, line in enumerate(lines, 1):
         line = line.strip()
@@ -59,7 +59,7 @@ def nemu_log_parse(lines: Iterable[str]) -> NemuLog:
     return data
 
 
-def nemu_log_print(log: NemuLog, f: Any | None = None) -> None:
+def verilator_log_print(log: VerilatorLog, f: Any | None = None) -> None:
     for _, dct in log.items():
         for path, dct in dct.items():
             for name, lst in dct.items():
@@ -75,5 +75,5 @@ if __name__ == "__main__":
 
     file: Path = Path(args.file)
     with open(file, "r") as f:
-        log: NemuLog = nemu_log_parse(f.readlines())
-    nemu_log_print(log)
+        log: VerilatorLog = verilator_log_parse(f.readlines())
+    verilator_log_print(log)

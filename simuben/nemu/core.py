@@ -1,33 +1,31 @@
 from pathlib import Path
 import subprocess
 
-from verilator.log import VerilatorLog, verilator_log_parse
-from verilator.config import VerilatorConfig
+from nemu.config import NEMUConfig
 
 
-class Verilator:
-    def __init__(self, config: VerilatorConfig) -> None:
+class NEMU:
+    def __init__(self, config: NEMUConfig) -> None:
         self.__config = config
 
-    def run(self, executable: Path) -> VerilatorLog:
+    def run(self, executable: Path) -> list[str]:
         command = [
             str(self.__config.executable_path),
-            "--no-diff",
-            "-i",
             executable,
+            "--batch",
         ]
 
         process = subprocess.Popen(
             command,
-            stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE,
             text=True,
         )
 
-        _, stderr = process.communicate()
+        stdout, _ = process.communicate()
 
         if process.returncode != 0:
             raise RuntimeError(
                 f"{' '.join(command)} returned {process.returncode}: {process.stderr}",
             )
 
-        return verilator_log_parse(stderr.splitlines())
+        return stdout.splitlines()
