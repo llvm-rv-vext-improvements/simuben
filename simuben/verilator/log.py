@@ -45,16 +45,6 @@ class VerilatorLog:
     )
 
 
-def argparser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-
-    parser.add_argument("file", type=str)
-
-    return parser
-
-
 def verilator_brief_log_parse(lines: Iterable[str]) -> VerilatorLog.Brief:
     instr_cycle_row: re.Pattern = re.compile(
         r".*Core-(\d) instrCnt = (\d+), cycleCnt = (\d+), IPC = \d+.\d+.*"
@@ -124,6 +114,16 @@ def verilator_perf_log_print(log: VerilatorLog.Perf, f: Any | None = None) -> No
                     continue
 
                 print(f"{path}.{name}: {lst}", file=f)
+
+
+def argparser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    parser.add_argument("file", type=str)
+
+    return parser
 
 
 if __name__ == "__main__":
