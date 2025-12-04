@@ -4,13 +4,19 @@ import yaml
 
 from nexus_am.config import NexusAMConfig
 from nemu.config import NEMUConfig
+from verilator.log_export import CSVConfig
 from verilator.config import VerilatorConfig
+
+
+class ExportConfig(NamedTuple):
+    csv: CSVConfig
 
 
 class SimuBenConfig(NamedTuple):
     nexus_am: NexusAMConfig
     verilator: VerilatorConfig | None = None
     nemu: NEMUConfig | None = None
+    export: ExportConfig = ExportConfig(csv=CSVConfig())
 
     @classmethod
     def from_yaml_file(cls, path: Path):
@@ -34,6 +40,24 @@ class SimuBenConfig(NamedTuple):
                     )
                     if "nemu" in yml
                     else None
+                ),
+                export=ExportConfig(
+                    csv=(
+                        CSVConfig(
+                            core_number=int(
+                                yml["export"]["brief"]["csv"]["core_number"]
+                            ),
+                            is_header_hidden=bool(
+                                yml["export"]["brief"]["csv"]["is_header_hidden"]
+                            ),
+                        )
+                        if (
+                            "export" in yml
+                            and "brief" in yml["export"]
+                            and "csv" in yml["export"]["brief"]
+                        )
+                        else CSVConfig()
+                    ),
                 ),
             )
 

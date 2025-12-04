@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-import yaml
-from dataclasses import asdict
-
 import cli
 from nexus_am.app import NexusAMApp
 from nemu.core import NEMU
+from verilator.log_export import verialtor_brief_to_csv, verilator_brief_to_yml
 from verilator.log import verilator_perf_log_print
 from verilator.core import Verilator
 
@@ -27,7 +25,7 @@ if __name__ == "__main__":
 
             print("[simuben] Printing the log to /tmp/nemu.log...")
             with open("/tmp/nemu.log", "w") as f:
-                f.writelines(line + '\n' for line in log)
+                f.writelines(line + "\n" for line in log)
 
         if verilator := input.config.verilator:
             emu = Verilator(verilator)
@@ -37,7 +35,14 @@ if __name__ == "__main__":
             print()
 
             print("[simuben] Here is a brief log:")
-            print(yaml.dump(asdict(log.brief)))
+            print(verilator_brief_to_yml(log.brief))
+
+            print("[simuben] Printing the brief to /tmp/verilator.brief.csv...")
+            with open("/tmp/verilator.brief.csv", "w") as f:
+                print(
+                    verialtor_brief_to_csv(log.brief, input.config.export.csv),
+                    file=f,
+                )
 
             print("[simuben] Printing the log to /tmp/verilator.log...")
             with open("/tmp/verilator.log", "w") as f:
