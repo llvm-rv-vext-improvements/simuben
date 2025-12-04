@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
+import yaml
+from dataclasses import asdict
+
 import cli
 from nexus_am.app import NexusAMApp
 from nemu.core import NEMU
-from verilator.log import verilator_log_print
+from verilator.log import verilator_perf_log_print
 from verilator.core import Verilator
 
 if __name__ == "__main__":
@@ -33,8 +36,11 @@ if __name__ == "__main__":
             log = emu.run(app.executable)
             print()
 
+            print("[simuben] Here is a brief log:")
+            print(yaml.dump(asdict(log.brief)))
+
             print("[simuben] Printing the log to /tmp/verilator.log...")
             with open("/tmp/verilator.log", "w") as f:
-                verilator_log_print(log, f)
+                verilator_perf_log_print(log.perf, f)
 
     print("[simuben] OK")
