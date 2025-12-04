@@ -41,24 +41,6 @@ class SimuBenConfig(NamedTuple):
                     if "nemu" in yml
                     else None
                 ),
-                export=ExportConfig(
-                    csv=(
-                        CSVConfig(
-                            core_number=int(
-                                yml["export"]["brief"]["csv"]["core_number"]
-                            ),
-                            is_header_hidden=bool(
-                                yml["export"]["brief"]["csv"]["is_header_hidden"]
-                            ),
-                        )
-                        if (
-                            "export" in yml
-                            and "brief" in yml["export"]
-                            and "csv" in yml["export"]["brief"]
-                        )
-                        else CSVConfig()
-                    ),
-                ),
             )
 
 

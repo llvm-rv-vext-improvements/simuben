@@ -42,6 +42,7 @@ if __name__ == "__main__":
                 print(
                     verialtor_brief_to_csv(log.brief, input.config.export.csv),
                     file=f,
+                    end="\n",
                 )
 
             print("[simuben] Printing the log to /tmp/verilator.log...")
