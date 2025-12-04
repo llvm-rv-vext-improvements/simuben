@@ -15,24 +15,26 @@ if __name__ == "__main__":
         print(f"[simuben] Building the app {app.name}...")
         app.build()
 
-        if verilator := input.config.verilator:
-            emu = Verilator(verilator)
-
-            print("[simuben] Running on the Verilator...")
-            log = emu.run(app.executable)
-
-            print("[simuben] Printing the log to /tmp/verilator.log...")
-            with open("/tmp/verilator.log", "w") as f:
-                verilator_log_print(log, f)
-
         if nemu := input.config.nemu:
             emu = NEMU(nemu)
 
             print("[simuben] Running on the NEMU...")
             log = emu.run(app.executable)
+            print()
 
             print("[simuben] Printing the log to /tmp/nemu.log...")
             with open("/tmp/nemu.log", "w") as f:
                 f.writelines(line + '\n' for line in log)
+
+        if verilator := input.config.verilator:
+            emu = Verilator(verilator)
+
+            print("[simuben] Running on the Verilator...")
+            log = emu.run(app.executable)
+            print()
+
+            print("[simuben] Printing the log to /tmp/verilator.log...")
+            with open("/tmp/verilator.log", "w") as f:
+                verilator_log_print(log, f)
 
     print("[simuben] OK")
