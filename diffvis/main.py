@@ -3,9 +3,11 @@
 # This is a LLM-generated file. Do not edit it.
 # Just throw it away and regenerate or rewrite.
 
+import argparse
 import sys
 import csv
 import html
+from datetime import datetime
 
 COLUMN_MAP = {
     "run_name": "Benchmark",
@@ -32,7 +34,7 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benchmark Results</title>
+    <title>SimuBen Report {time}</title>
     <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -102,11 +104,12 @@ HTML_TEMPLATE = """
 </head>
 <body>
     <div class="container">
-        <h1>SimuBen Report</h1>
+        <h1>SimuBen Report {time}</h1>
         <table id="benchmarkTable">
             {table_head}
             {table_body}
         </table>
+        <p><var>{old}</var> (old) vs <var>{new}</var> (new)</p>
     </div>
     <script>
         const sortState = {{}};
@@ -199,8 +202,25 @@ def generate_table_parts(header, data):
     return table_head, table_body
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-o",
+        "--old-tag",
+        required=True,
+    )
+    parser.add_argument(
+        "-n",
+        "--new-tag",
+        required=True,
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     try:
+        args = parse_args()
+
         csv_content = sys.stdin.read()
 
         if not csv_content.strip():
@@ -214,7 +234,13 @@ if __name__ == "__main__":
 
         table_head, table_body = generate_table_parts(header, data)
 
-        final_html = HTML_TEMPLATE.format(table_head=table_head, table_body=table_body)
+        final_html = HTML_TEMPLATE.format(
+            table_head=table_head,
+            table_body=table_body,
+            time=datetime.now().strftime("%Y-%m-%d %H:%M"),
+            old=args.old_tag,
+            new=args.new_tag,
+        )
         print(final_html)
 
     except StopIteration:
