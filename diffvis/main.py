@@ -102,7 +102,7 @@ HTML_TEMPLATE = """
 </head>
 <body>
     <div class="container">
-        <h1>Benchmark Visualization</h1>
+        <h1>SimuBen Report</h1>
         <table id="benchmarkTable">
             {table_head}
             {table_body}
