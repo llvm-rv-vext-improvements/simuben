@@ -18,8 +18,29 @@ jobs:
       - name: Get Nexus AM
         run: git clone https://github.com/OpenXiangShan/nexus-am.git $HOME/nexus-am
 
-      - name: Test Goodbye
-        run: ./test/goodbye.sh
+      - name: Create /tmp/simuben.yml
+        run: |
+          ./test/simuben.sh
+          cat /tmp/simuben.yml
 
-      - name: Test C & LL
-        run: ./test/candll.sh
+      - name: Run BaSim
+        run: |
+          ./basim/main.py \
+            --run-name test \
+            --dir ./test \
+            --simuben ./simuben/main.py \
+            --config /tmp/simuben.yml
+
+      - name: Print CSVs
+        run: |
+          echo "<| The baseline |>"
+          cat ./test/baseline.csv
+          echo "<| SimuBen |>"
+          cat /tmp/basim/test/verilator.brief.merged.csv
+
+      - name: Generate a report
+        run: |
+          ./bendiff/main.py \
+            -o /tmp/basim/test/verilator.brief.merged.csv \
+            -n /tmp/a.csv | ./diffvis/main.py > /tmp/a.html
+          cat /tmp/a.html
