@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# This is a LLM-generated file. Do not edit it.
+# Just throw it away and regenerate or rewrite.
+
 import argparse
 import csv
 import sys
@@ -84,7 +87,6 @@ def generate_diff(old_data: dict, new_data: dict) -> list:
 
     output_rows = []
     header = [
-        "run_name",
         "test_suite_name",
         "instructions_old",
         "instructions_new",
