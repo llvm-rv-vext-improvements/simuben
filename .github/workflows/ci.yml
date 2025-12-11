@@ -49,5 +49,5 @@ jobs:
           ./bendiff/main.py \
             --old-path /tmp/a.csv \
             --new-path /tmp/basim/test/verilator.brief.merged.csv \
-            | ./diffvis/main.py > /tmp/a.html
+            | ./diffvis/main.py -o baseline -n test > /tmp/a.html
           cat /tmp/a.html
