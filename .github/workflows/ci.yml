@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install
+      - name: Get LLVM Toolchain
         run: |
           sudo apt-get update
           sudo apt-get install llvm clang lld
@@ -18,29 +18,36 @@ jobs:
       - name: Get Nexus AM
         run: git clone https://github.com/OpenXiangShan/nexus-am.git $HOME/nexus-am
 
+      - name: Get NEMU
+        run: git clone https://github.com/OpenXiangShan/NEMU.git $HOME/NEMU
+
+      - name: Get Verilator
+        run: echo "It remains as an exercise"
+
       - name: Create /tmp/simuben.yml
         run: |
           ./test/simuben.sh
           cat /tmp/simuben.yml
 
-      - name: Run BaSim
+      - name: Run SimuBen
         run: |
           ./basim/main.py \
-            --run-name test \
-            --dir ./test \
-            --simuben ./simuben/main.py \
-            --config /tmp/simuben.yml
+            --run-name  test \
+            --dir       ./test \
+            --simuben   ./simuben/main.py \
+            --config    /tmp/simuben.yml
 
-      - name: Print CSVs
+      - name: Print SimuBen Verilator Report
         run: |
           echo "<| The baseline |>"
           cat ./test/baseline.csv
           echo "<| SimuBen |>"
           cat /tmp/basim/test/verilator.brief.merged.csv
 
-      - name: Generate a report
+      - name: Generate SimuBen HTML Report
         run: |
           ./bendiff/main.py \
-            -o /tmp/basim/test/verilator.brief.merged.csv \
-            -n /tmp/a.csv | ./diffvis/main.py > /tmp/a.html
+            --old-path /tmp/a.csv \
+            --new-path /tmp/basim/test/verilator.brief.merged.csv \
+            | ./diffvis/main.py > /tmp/a.html
           cat /tmp/a.html
