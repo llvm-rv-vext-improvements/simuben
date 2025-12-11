@@ -22,7 +22,7 @@ def verialtor_brief_to_csv(brief: VerilatorLog.Brief, cfg: CSVConfig) -> str:
     writer = csv.writer(output)
 
     if not cfg.is_header_hidden:
-        writer.writerow(["Instructions", "Cycles"])
+        writer.writerow(["instructions", "cycles"])
 
     cores = [core for core in brief.cores if core.core_number == cfg.core_number]
     for core in cores:
